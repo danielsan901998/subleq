@@ -38,6 +38,17 @@ public:
         int B_addr = memory[program_counter + 1];
         int C_addr = memory[program_counter + 2];
 
+        if (A_addr == OUTPUT_ADDR_MARKER && B_addr == INPUT_ADDR_MARKER) {
+            // Special case: directly move input to output
+            int input_char;
+            if (!(std::cin >> input_char)) {
+                return false; // Halt on input error
+            }
+            std::cout << static_cast<char>(-input_char);
+            program_counter += 3;
+            return true;
+        }
+
         if (A_addr == OUTPUT_ADDR_MARKER) {
             if (B_addr < 0 || B_addr >= memory_size) return false;
             std::cout << static_cast<char>(memory[B_addr]);
@@ -48,7 +59,9 @@ public:
         if (B_addr == INPUT_ADDR_MARKER) {
             if (A_addr < 0 || A_addr >= memory_size) return false;
             int input_char;
-            std::cin >> input_char;
+            if (!(std::cin >> input_char)) {
+                return false; // Halt on input error
+            }
             memory[A_addr] = input_char;
             program_counter += 3;
             return true;
@@ -73,7 +86,7 @@ public:
     }
 
     void dump_memory(int start, int end) const {
-        std::cout << "\n--- Memory Dump (" << start << " to " << end << ") ---" << std::endl;
+        std::cout << "--- Memory Dump (" << start << " to " << end << ") ---" << std::endl;
         for (int i = start; i <= end && i < memory_size; ++i) {
             std::cout << "[" << i << "]: " << memory[i] << std::endl;
         }
