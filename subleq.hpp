@@ -40,29 +40,29 @@ public:
 
         if (A_addr == OUTPUT_ADDR_MARKER && B_addr == INPUT_ADDR_MARKER) {
             // Special case: directly move input to output
-            int input_char;
-            if (!(std::cin >> input_char)) {
+            int input_value;
+            if (!(std::cin >> input_value)) {
                 return false; // Halt on input error
             }
-            std::cout << static_cast<char>(-input_char);
+            std::cout << -input_value << std::endl;
             program_counter += 3;
             return true;
         }
 
         if (A_addr == OUTPUT_ADDR_MARKER) {
             if (B_addr < 0 || B_addr >= memory_size) return false;
-            std::cout << static_cast<char>(memory[B_addr]);
+            std::cout << memory[B_addr] << std::endl;
             program_counter += 3;
             return true;
         }
 
         if (B_addr == INPUT_ADDR_MARKER) {
             if (A_addr < 0 || A_addr >= memory_size) return false;
-            int input_char;
-            if (!(std::cin >> input_char)) {
+            int input_value;
+            if (!(std::cin >> input_value)) {
                 return false; // Halt on input error
             }
-            memory[A_addr] = input_char;
+            memory[A_addr] = input_value;
             program_counter += 3;
             return true;
         }
@@ -91,5 +91,61 @@ public:
             std::cout << "[" << i << "]: " << memory[i] << std::endl;
         }
         std::cout << "--------------------------" << std::endl;
+    }
+};
+
+class SubleqEmulatorNonInteractive : public SubleqEmulator {
+public:
+    std::vector<int> input_vector;
+    std::vector<int> output_vector;
+    int input_ptr;
+
+    SubleqEmulatorNonInteractive(int size, const std::vector<int>& input) : SubleqEmulator(size), input_vector(input), input_ptr(0) {}
+
+    bool step() {
+        if (program_counter < 0 || program_counter >= memory_size || program_counter + 2 >= memory_size) {
+            return false; // Halt condition
+        }
+
+        int A_addr = memory[program_counter];
+        int B_addr = memory[program_counter + 1];
+        int C_addr = memory[program_counter + 2];
+
+        if (A_addr == OUTPUT_ADDR_MARKER) {
+            if (B_addr == INPUT_ADDR_MARKER) {
+                if (input_ptr >= input_vector.size()) return false;
+                output_vector.push_back(-input_vector[input_ptr++]);
+            } else {
+                if (B_addr < 0 || B_addr >= memory_size) return false;
+                output_vector.push_back(memory[B_addr]);
+            }
+            program_counter += 3;
+            return true;
+        }
+
+        if (B_addr == INPUT_ADDR_MARKER) {
+            if (A_addr < 0 || A_addr >= memory_size) return false;
+            if (input_ptr >= input_vector.size()) return false;
+            memory[A_addr] = input_vector[input_ptr++];
+            program_counter += 3;
+            return true;
+        }
+
+        if (A_addr < 0 || A_addr >= memory_size || B_addr < 0 || B_addr >= memory_size) {
+            return false; // Halt condition
+        }
+
+        memory[A_addr] -= memory[B_addr];
+
+        if (memory[A_addr] <= 0) {
+            program_counter = C_addr;
+        } else {
+            program_counter += 3;
+        }
+        return true;
+    }
+
+    void run(int max_steps) {
+        for (int i = 0; i < max_steps && step(); ++i) {}
     }
 };
