@@ -71,11 +71,11 @@ void SubleqInterpreter::run() {
 }
 
 void SubleqInterpreter::dump_memory(int start, int end) const {
-    std::cout << "--- Memory Dump (" << start << " to " << end << ") ---" << std::endl;
+    std::cout << "--- Memory Dump (" << start << " to " << end << ") ---" << '\n';
     for (int i = start; i <= end && i < memory_size; ++i) {
-        std::cout << "[" << i << "]: " << memory[i] << std::endl;
+        std::cout << "[" << i << "]: " << memory[i] << '\n';
     }
-    std::cout << "--------------------------" << std::endl;
+    std::cout << "--------------------------" << '\n';
 }
 
 void SubleqInterpreter::_handle_branch(int value, int C_addr) {
@@ -91,7 +91,7 @@ bool SubleqInterpreter::get_input(int& value) {
 }
 
 void SubleqInterpreter::put_output(int value) {
-    std::cout << value << std::endl;
+    std::cout << value << '\n';
 }
 
 SubleqInterpreterNonInteractive::SubleqInterpreterNonInteractive(int size, const std::vector<int>& input) : SubleqInterpreter(size), input_vector(input), input_ptr(0) {}

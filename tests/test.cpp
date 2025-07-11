@@ -5,13 +5,13 @@
 #include <vector>
 
 void run_subtraction_test() {
-    std::cout << "Running subtraction test..." << std::endl;
+    std::cout << "Running subtraction test..." << '\n';
     AssemblyParser parser;
     std::vector<int> program;
     try {
         program = parser.parse("tests/asm/subtraction.asm");
     } catch (const std::exception& e) {
-        std::cerr << "Error parsing subtraction.asm: " << e.what() << std::endl;
+        std::cerr << "Error parsing subtraction.asm: " << e.what() << '\n';
         assert(false && "Parser failed for subtraction.asm");
     }
 
@@ -22,17 +22,17 @@ void run_subtraction_test() {
 
     assert(interpreter.output_vector.size() == 1);
     assert(interpreter.output_vector[0] == 5);
-    std::cout << "Subtraction test passed!" << std::endl;
+    std::cout << "Subtraction test passed!" << '\n';
 }
 
 void run_addition_test() {
-    std::cout << "Running addition test..." << std::endl;
+    std::cout << "Running addition test..." << '\n';
     AssemblyParser parser;
     std::vector<int> program;
     try {
         program = parser.parse("tests/asm/addition.asm");
     } catch (const std::exception& e) {
-        std::cerr << "Error parsing addition.asm: " << e.what() << std::endl;
+        std::cerr << "Error parsing addition.asm: " << e.what() << '\n';
         assert(false && "Parser failed for addition.asm");
     }
 
@@ -43,17 +43,17 @@ void run_addition_test() {
 
     assert(interpreter.output_vector.size() == 1);
     assert(interpreter.output_vector[0] == 8);
-    std::cout << "Addition test passed!" << std::endl;
+    std::cout << "Addition test passed!" << '\n';
 }
 
 void run_cat_program_test() {
-    std::cout << "Running cat program test..." << std::endl;
+    std::cout << "Running cat program test..." << '\n';
     AssemblyParser parser;
     std::vector<int> program;
     try {
         program = parser.parse("tests/asm/cat.asm");
     } catch (const std::exception& e) {
-        std::cerr << "Error parsing cat.asm: " << e.what() << std::endl;
+        std::cerr << "Error parsing cat.asm: " << e.what() << '\n';
         assert(false && "Parser failed for cat.asm");
     }
 
@@ -68,17 +68,17 @@ void run_cat_program_test() {
     assert(interpreter.output_vector[2] == 30);
     assert(interpreter.output_vector[3] == 0);
     assert(interpreter.output_vector[4] == -5);
-    std::cout << "Cat program test passed!" << std::endl;
+    std::cout << "Cat program test passed!" << '\n';
 }
 
 void run_sequence_reverser_test() {
-    std::cout << "Running stack example test..." << std::endl;
+    std::cout << "Running stack example test..." << '\n';
     AssemblyParser parser;
     std::vector<int> program;
     try {
         program = parser.parse("tests/asm/sequence_reverser.asm");
     } catch (const std::exception& e) {
-        std::cerr << "Error parsing stack_example.asm: " << e.what() << std::endl;
+        std::cerr << "Error parsing stack_example.asm: " << e.what() << '\n';
         assert(false && "Parser failed for stack_example.asm");
     }
 
@@ -92,7 +92,7 @@ void run_sequence_reverser_test() {
     assert(interpreter.output_vector[1] == 20);
     assert(interpreter.output_vector[2] == 10);
     assert(interpreter.output_vector[3] == 0);
-    std::cout << "Stack example test passed!" << std::endl;
+    std::cout << "Stack example test passed!" << '\n';
 }
 
 int main() {
