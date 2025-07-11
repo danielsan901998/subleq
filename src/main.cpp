@@ -19,6 +19,7 @@ int main(int argc, char* argv[]) {
 
     SubleqInterpreter interpreter(1024);
     interpreter.load_program(program);
+    interpreter.dump_memory(0,program.size());
     interpreter.run();
     return 0;
 }
