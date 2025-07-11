@@ -1,15 +1,15 @@
 CXX = g++
-CXXFLAGS = -Wall -Wextra -std=c++11
+CXXFLAGS = -Wall -Wextra -std=c++11 -Iinc
 
 all: subleq
 
-subleq: main.cpp parser.cpp subleq.hpp parser.hpp
-	$(CXX) $(CXXFLAGS) main.cpp parser.cpp -o subleq
+subleq: src/main.cpp src/parser.cpp inc/subleq.hpp inc/parser.hpp
+	$(CXX) $(CXXFLAGS) src/main.cpp src/parser.cpp -o subleq
 
 .PHONY: clean
 
-test: tests/test.cpp subleq.hpp parser.cpp parser.hpp
-	$(CXX) $(CXXFLAGS) tests/test.cpp parser.cpp -o test_subleq
+test: tests/test.cpp src/parser.cpp inc/subleq.hpp inc/parser.hpp
+	$(CXX) $(CXXFLAGS) tests/test.cpp src/parser.cpp -o test_subleq
 	./test_subleq
 
 clean:

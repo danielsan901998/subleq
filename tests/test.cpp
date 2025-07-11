@@ -1,5 +1,5 @@
-#include "../subleq.hpp"
-#include "../parser.hpp"
+#include "subleq.hpp"
+#include "parser.hpp"
 #include <cassert>
 #include <iostream>
 #include <vector>
