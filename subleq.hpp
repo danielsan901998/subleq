@@ -6,13 +6,13 @@
 const int INPUT_ADDR_MARKER = -1;
 const int OUTPUT_ADDR_MARKER = -2;
 
-class SubleqEmulator {
+class SubleqInterpreter {
 	public:
 		std::vector<int> memory;
 		int memory_size;
 		int program_counter;
 
-		SubleqEmulator(int size) : memory_size(size), program_counter(0) {
+		SubleqInterpreter(int size) : memory_size(size), program_counter(0) {
 			if (size <= 0) {
 				throw std::invalid_argument("Memory size must be positive.");
 			}
@@ -48,7 +48,7 @@ class SubleqEmulator {
 					value = -input_value;
 				} else {
 					if (B_addr < 0 || B_addr >= memory_size) return false;
-					value = memory[B_addr];
+					value = -memory[B_addr];
 				}
 				put_output(value);
 				_handle_branch(value, C_addr);
@@ -61,7 +61,7 @@ class SubleqEmulator {
 				if (!get_input(input_value)) {
 					return false; // Halt on input error
 				}
-				memory[A_addr] = input_value;
+				memory[A_addr] -= input_value;
 				program_counter += 3;
 				return true;
 			}
@@ -106,13 +106,13 @@ class SubleqEmulator {
 		}
 };
 
-class SubleqEmulatorNonInteractive : public SubleqEmulator {
+class SubleqInterpreterNonInteractive : public SubleqInterpreter {
 	public:
 		std::vector<int> input_vector;
 		std::vector<int> output_vector;
 		size_t input_ptr;
 
-		SubleqEmulatorNonInteractive(int size, const std::vector<int>& input) : SubleqEmulator(size), input_vector(input), input_ptr(0) {}
+		SubleqInterpreterNonInteractive(int size, const std::vector<int>& input) : SubleqInterpreter(size), input_vector(input), input_ptr(0) {}
 
 		void run(int max_steps) {
 			for (int i = 0; i < max_steps && step(); ++i) {}
