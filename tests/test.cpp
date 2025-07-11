@@ -44,19 +44,21 @@ void run_addition_test() {
 void run_cat_program_test() {
     std::cout << "Running cat program test..." << std::endl;
     std::vector<int> program = {
-        10, -1, 3, // Read input to M[10]
-        -2, 10, 6, // Output M[10]
-        15, 15, 0  // Unconditional jump to 0
+        10, -1, 3,  // Read input to M[10]
+        -2, 10, 9,  // Output M[10], if value <= 0, jump to HALT
+        19, 19, 0,  // Jump to 0
+        -1, -1, -1  // Halt
     };
-    std::vector<int> input = {10, 20, 30};
+    std::vector<int> input = {10, 20, 30, 0, -5};
     SubleqEmulatorNonInteractive emulator(20, input);
     emulator.load_program(program);
     emulator.run(100);
 
-    assert(emulator.output_vector.size() == 3);
+    assert(emulator.output_vector.size() == 4);
     assert(emulator.output_vector[0] == 10);
     assert(emulator.output_vector[1] == 20);
     assert(emulator.output_vector[2] == 30);
+    assert(emulator.output_vector[3] == 0);
     std::cout << "Cat program test passed!" << std::endl;
 }
 

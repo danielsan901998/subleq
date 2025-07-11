@@ -30,7 +30,7 @@ public:
     }
 
     bool step() {
-        if (program_counter < 0 || program_counter >= memory_size || program_counter + 2 >= memory_size) {
+        if (program_counter < 0 || program_counter + 2 >= memory_size) {
             return false; // Halt condition
         }
 
@@ -44,15 +44,25 @@ public:
             if (!(std::cin >> input_value)) {
                 return false; // Halt on input error
             }
-            std::cout << -input_value << std::endl;
-            program_counter += 3;
+						input_value=-input_value;
+            std::cout << input_value << std::endl;
+            if (input_value <= 0) {
+                program_counter = C_addr;
+            } else {
+                program_counter += 3;
+            }
             return true;
         }
 
         if (A_addr == OUTPUT_ADDR_MARKER) {
             if (B_addr < 0 || B_addr >= memory_size) return false;
-            std::cout << memory[B_addr] << std::endl;
-            program_counter += 3;
+            int value = memory[B_addr];
+            std::cout << value << std::endl;
+            if (value <= 0) {
+                program_counter = C_addr;
+            } else {
+                program_counter += 3;
+            }
             return true;
         }
 
@@ -98,7 +108,7 @@ class SubleqEmulatorNonInteractive : public SubleqEmulator {
 public:
     std::vector<int> input_vector;
     std::vector<int> output_vector;
-    int input_ptr;
+    size_t input_ptr;
 
     SubleqEmulatorNonInteractive(int size, const std::vector<int>& input) : SubleqEmulator(size), input_vector(input), input_ptr(0) {}
 
@@ -112,14 +122,20 @@ public:
         int C_addr = memory[program_counter + 2];
 
         if (A_addr == OUTPUT_ADDR_MARKER) {
+            int value;
             if (B_addr == INPUT_ADDR_MARKER) {
                 if (input_ptr >= input_vector.size()) return false;
-                output_vector.push_back(-input_vector[input_ptr++]);
+                value = -input_vector[input_ptr++];
             } else {
                 if (B_addr < 0 || B_addr >= memory_size) return false;
-                output_vector.push_back(memory[B_addr]);
+                value = memory[B_addr];
             }
-            program_counter += 3;
+            output_vector.push_back(value);
+            if (value <= 0) {
+                program_counter = C_addr;
+            } else {
+                program_counter += 3;
+            }
             return true;
         }
 
